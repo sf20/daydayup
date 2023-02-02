@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ryfast.project.biz.company.mapper.StockCompanyMapper">
+    
+    <resultMap type="StockCompany" id="StockCompanyResult">
+        <result property="stockCode"    column="stock_code"    />
+        <result property="shortName"    column="short_name"    />
+        <result property="listingDate"    column="listing_date"    />
+        <result property="fullName"    column="full_name"    />
+        <result property="market"    column="market"    />
+        <result property="industry"    column="industry"    />
+    </resultMap>
+
+    <sql id="selectStockCompanyVo">
+        select stock_code, short_name, listing_date, full_name, market, industry from stock_company
+    </sql>
+
+    <select id="selectStockCompanyList" parameterType="StockCompany" resultMap="StockCompanyResult">
+        <include refid="selectStockCompanyVo"/>
+        <where>
+            <if test="stockCode != null  and stockCode != ''"> and stock_code like concat(#{stockCode}, '%')</if>
+            <if test="shortName != null  and shortName != ''"> and short_name like concat('%', #{shortName}, '%')</if>
+            <if test="listingDate != null "> and listing_date = #{listingDate}</if>
+            <if test="fullName != null  and fullName != ''"> and full_name like concat('%', #{fullName}, '%')</if>
+            <if test="market != null  and market != ''"> and market = #{market}</if>
+            <if test="industry != null  and industry != ''"> and industry like concat('%', #{industry}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectStockCompanyByStockCode" parameterType="String" resultMap="StockCompanyResult">
+        <include refid="selectStockCompanyVo"/>
+        where stock_code = #{stockCode}
+    </select>
+        
+    <insert id="insertStockCompany" parameterType="StockCompany">
+        insert into stock_company
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="stockCode != null">stock_code,</if>
+            <if test="shortName != null and shortName != ''">short_name,</if>
+            <if test="listingDate != null">listing_date,</if>
+            <if test="fullName != null and fullName != ''">full_name,</if>
+            <if test="market != null and market != ''">market,</if>
+            <if test="industry != null and industry != ''">industry,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="stockCode != null">#{stockCode},</if>
+            <if test="shortName != null and shortName != ''">#{shortName},</if>
+            <if test="listingDate != null">#{listingDate},</if>
+            <if test="fullName != null and fullName != ''">#{fullName},</if>
+            <if test="market != null and market != ''">#{market},</if>
+            <if test="industry != null and industry != ''">#{industry},</if>
+         </trim>
+    </insert>
+
+    <update id="updateStockCompany" parameterType="StockCompany">
+        update stock_company
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="shortName != null and shortName != ''">short_name = #{shortName},</if>
+            <if test="listingDate != null">listing_date = #{listingDate},</if>
+            <if test="fullName != null and fullName != ''">full_name = #{fullName},</if>
+            <if test="market != null and market != ''">market = #{market},</if>
+            <if test="industry != null and industry != ''">industry = #{industry},</if>
+        </trim>
+        where stock_code = #{stockCode}
+    </update>
+
+    <delete id="deleteStockCompanyByStockCode" parameterType="String">
+        delete from stock_company where stock_code = #{stockCode}
+    </delete>
+
+    <delete id="deleteStockCompanyByStockCodes" parameterType="String">
+        delete from stock_company where stock_code in 
+        <foreach item="stockCode" collection="array" open="(" separator="," close=")">
+            #{stockCode}
+        </foreach>
+    </delete>
+
+</mapper>
