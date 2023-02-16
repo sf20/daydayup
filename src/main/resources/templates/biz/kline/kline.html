@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('kline列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <label>代码：</label>
+                                <input type="text" name="stockCode"/>
+                            </li>
+                            <li>
+                                <label>日期：</label>
+                                <input type="text" class="time-input" placeholder="请选择日期" name="tradingDate"/>
+                            </li>
+                            <li>
+                                <label>涨幅：</label>
+                                <input type="text" name="priceRange"/>
+                            </li>
+                            <li>
+                                <label>WR：</label>
+                                <input type="text" name="wr"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="biz:kline:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="biz:kline:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="biz:kline:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="biz:kline:export">
+                    <i class="fa fa-download"></i> 导出
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('biz:kline:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('biz:kline:remove')}]];
+        var prefix = ctx + "biz/kline";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "kline",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field: 'stockCode',
+                    title: '代码'
+                },
+                {
+                    field: 'tradingDate',
+                    title: '日期'
+                },
+                {
+                    field: 'openPrice',
+                    title: '开盘'
+                },
+                {
+                    field: 'highPrice',
+                    title: '最高'
+                },
+                {
+                    field: 'lowPrice',
+                    title: '最低'
+                },
+                {
+                    field: 'closePrice',
+                    title: '收盘'
+                },
+                {
+                    field: 'volume',
+                    title: '成交量'
+                },
+                {
+                    field: 'closingPricePrevious',
+                    title: '昨收'
+                },
+                {
+                    field: 'priceRange',
+                    title: '涨幅'
+                },
+                {
+                    field: 'ma5',
+                    title: 'ma5'
+                },
+                {
+                    field: 'ma10',
+                    title: 'ma10'
+                },
+                {
+                    field: 'ma20',
+                    title: 'ma20'
+                },
+                {
+                    field: 'ma30',
+                    title: 'ma30'
+                },
+                {
+                    field: 'ma60',
+                    title: 'ma60'
+                },
+                {
+                    field: 'ma200',
+                    title: 'ma200'
+                },
+                {
+                    field: 'wr',
+                    title: 'wr'
+                },
+                {
+                    field: 'ema12',
+                    title: 'ema12'
+                },
+                {
+                    field: 'ema26',
+                    title: 'ema26'
+                },
+                {
+                    field: 'diff',
+                    title: 'diff'
+                },
+                {
+                    field: 'dea',
+                    title: 'dea'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.stockCode + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.stockCode + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

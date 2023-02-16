@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增kline')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-kline-add">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">开盘：</label>
+                <div class="col-sm-8">
+                    <input name="openPrice" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">最高：</label>
+                <div class="col-sm-8">
+                    <input name="highPrice" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">最低：</label>
+                <div class="col-sm-8">
+                    <input name="lowPrice" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">收盘：</label>
+                <div class="col-sm-8">
+                    <input name="closePrice" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">成交量：</label>
+                <div class="col-sm-8">
+                    <input name="volume" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">昨收：</label>
+                <div class="col-sm-8">
+                    <input name="closingPricePrevious" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">涨幅：</label>
+                <div class="col-sm-8">
+                    <input name="priceRange" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">ma5：</label>
+                <div class="col-sm-8">
+                    <input name="ma5" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">ma10：</label>
+                <div class="col-sm-8">
+                    <input name="ma10" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">ma20：</label>
+                <div class="col-sm-8">
+                    <input name="ma20" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">ma30：</label>
+                <div class="col-sm-8">
+                    <input name="ma30" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">ma60：</label>
+                <div class="col-sm-8">
+                    <input name="ma60" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">ma200：</label>
+                <div class="col-sm-8">
+                    <input name="ma200" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">wr：</label>
+                <div class="col-sm-8">
+                    <input name="wr" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">ema12：</label>
+                <div class="col-sm-8">
+                    <input name="ema12" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">ema26：</label>
+                <div class="col-sm-8">
+                    <input name="ema26" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">diff：</label>
+                <div class="col-sm-8">
+                    <input name="diff" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label is-required">dea：</label>
+                <div class="col-sm-8">
+                    <input name="dea" class="form-control" type="text" required>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var prefix = ctx + "biz/kline"
+        $("#form-kline-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-kline-add').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ryfast.project.biz.kline.mapper.StockKlineDay18Mapper">
+    
+    <resultMap type="StockKlineDay18" id="StockKlineDay18Result">
+        <result property="stockCode"    column="stock_code"    />
+        <result property="tradingDate"    column="trading_date"    />
+        <result property="openPrice"    column="open_price"    />
+        <result property="highPrice"    column="high_price"    />
+        <result property="lowPrice"    column="low_price"    />
+        <result property="closePrice"    column="close_price"    />
+        <result property="volume"    column="volume"    />
+        <result property="closingPricePrevious"    column="closing_price_previous"    />
+        <result property="priceRange"    column="price_range"    />
+        <result property="ma5"    column="ma5"    />
+        <result property="ma10"    column="ma10"    />
+        <result property="ma20"    column="ma20"    />
+        <result property="ma30"    column="ma30"    />
+        <result property="ma60"    column="ma60"    />
+        <result property="ma200"    column="ma200"    />
+        <result property="wr"    column="wr"    />
+        <result property="ema12"    column="ema12"    />
+        <result property="ema26"    column="ema26"    />
+        <result property="diff"    column="diff"    />
+        <result property="dea"    column="dea"    />
+    </resultMap>
+
+    <sql id="selectStockKlineDay18Vo">
+        select stock_code, trading_date, open_price, high_price, low_price, close_price, volume, closing_price_previous, price_range, ma5, ma10, ma20, ma30, ma60, ma200, wr, ema12, ema26, diff, dea from stock_kline_day_18
+    </sql>
+
+    <select id="selectStockKlineDay18List" parameterType="StockKlineDay18" resultMap="StockKlineDay18Result">
+        <include refid="selectStockKlineDay18Vo"/>
+        <where>  
+            <if test="stockCode != null  and stockCode != ''"> and stock_code = #{stockCode}</if>
+            <if test="tradingDate != null "> and trading_date = #{tradingDate}</if>
+            <if test="priceRange != null "> and price_range = #{priceRange}</if>
+            <if test="wr != null "> and wr = #{wr}</if>
+        </where>
+    </select>
+    
+    <select id="selectStockKlineDay18ByStockCode" parameterType="String" resultMap="StockKlineDay18Result">
+        <include refid="selectStockKlineDay18Vo"/>
+        where stock_code = #{stockCode}
+    </select>
+        
+    <insert id="insertStockKlineDay18" parameterType="StockKlineDay18">
+        insert into stock_kline_day_18
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="stockCode != null">stock_code,</if>
+            <if test="tradingDate != null">trading_date,</if>
+            <if test="openPrice != null">open_price,</if>
+            <if test="highPrice != null">high_price,</if>
+            <if test="lowPrice != null">low_price,</if>
+            <if test="closePrice != null">close_price,</if>
+            <if test="volume != null">volume,</if>
+            <if test="closingPricePrevious != null">closing_price_previous,</if>
+            <if test="priceRange != null">price_range,</if>
+            <if test="ma5 != null">ma5,</if>
+            <if test="ma10 != null">ma10,</if>
+            <if test="ma20 != null">ma20,</if>
+            <if test="ma30 != null">ma30,</if>
+            <if test="ma60 != null">ma60,</if>
+            <if test="ma200 != null">ma200,</if>
+            <if test="wr != null">wr,</if>
+            <if test="ema12 != null">ema12,</if>
+            <if test="ema26 != null">ema26,</if>
+            <if test="diff != null">diff,</if>
+            <if test="dea != null">dea,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="stockCode != null">#{stockCode},</if>
+            <if test="tradingDate != null">#{tradingDate},</if>
+            <if test="openPrice != null">#{openPrice},</if>
+            <if test="highPrice != null">#{highPrice},</if>
+            <if test="lowPrice != null">#{lowPrice},</if>
+            <if test="closePrice != null">#{closePrice},</if>
+            <if test="volume != null">#{volume},</if>
+            <if test="closingPricePrevious != null">#{closingPricePrevious},</if>
+            <if test="priceRange != null">#{priceRange},</if>
+            <if test="ma5 != null">#{ma5},</if>
+            <if test="ma10 != null">#{ma10},</if>
+            <if test="ma20 != null">#{ma20},</if>
+            <if test="ma30 != null">#{ma30},</if>
+            <if test="ma60 != null">#{ma60},</if>
+            <if test="ma200 != null">#{ma200},</if>
+            <if test="wr != null">#{wr},</if>
+            <if test="ema12 != null">#{ema12},</if>
+            <if test="ema26 != null">#{ema26},</if>
+            <if test="diff != null">#{diff},</if>
+            <if test="dea != null">#{dea},</if>
+         </trim>
+    </insert>
+
+    <update id="updateStockKlineDay18" parameterType="StockKlineDay18">
+        update stock_kline_day_18
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="tradingDate != null">trading_date = #{tradingDate},</if>
+            <if test="openPrice != null">open_price = #{openPrice},</if>
+            <if test="highPrice != null">high_price = #{highPrice},</if>
+            <if test="lowPrice != null">low_price = #{lowPrice},</if>
+            <if test="closePrice != null">close_price = #{closePrice},</if>
+            <if test="volume != null">volume = #{volume},</if>
+            <if test="closingPricePrevious != null">closing_price_previous = #{closingPricePrevious},</if>
+            <if test="priceRange != null">price_range = #{priceRange},</if>
+            <if test="ma5 != null">ma5 = #{ma5},</if>
+            <if test="ma10 != null">ma10 = #{ma10},</if>
+            <if test="ma20 != null">ma20 = #{ma20},</if>
+            <if test="ma30 != null">ma30 = #{ma30},</if>
+            <if test="ma60 != null">ma60 = #{ma60},</if>
+            <if test="ma200 != null">ma200 = #{ma200},</if>
+            <if test="wr != null">wr = #{wr},</if>
+            <if test="ema12 != null">ema12 = #{ema12},</if>
+            <if test="ema26 != null">ema26 = #{ema26},</if>
+            <if test="diff != null">diff = #{diff},</if>
+            <if test="dea != null">dea = #{dea},</if>
+        </trim>
+        where stock_code = #{stockCode}
+    </update>
+
+    <delete id="deleteStockKlineDay18ByStockCode" parameterType="String">
+        delete from stock_kline_day_18 where stock_code = #{stockCode}
+    </delete>
+
+    <delete id="deleteStockKlineDay18ByStockCodes" parameterType="String">
+        delete from stock_kline_day_18 where stock_code in 
+        <foreach item="stockCode" collection="array" open="(" separator="," close=")">
+            #{stockCode}
+        </foreach>
+    </delete>
+
+</mapper>
