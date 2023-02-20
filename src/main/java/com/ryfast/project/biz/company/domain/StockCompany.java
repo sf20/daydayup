@@ -1,6 +1,8 @@
 package com.ryfast.project.biz.company.domain;
 
 import java.util.Date;
+import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ryfast.framework.aspectj.lang.annotation.Excel;
 import com.ryfast.framework.web.domain.BaseEntity;
@@ -106,5 +108,18 @@ public class StockCompany extends BaseEntity
             .append("market", getMarket())
             .append("industry", getIndustry())
             .toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        StockCompany that = (StockCompany) o;
+        return stockCode.equals(that.stockCode) && shortName.equals(that.shortName) && listingDate.equals(that.listingDate) && fullName.equals(that.fullName) && market.equals(that.market) && industry.equals(that.industry);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(stockCode, shortName, listingDate, fullName, market, industry);
     }
 }

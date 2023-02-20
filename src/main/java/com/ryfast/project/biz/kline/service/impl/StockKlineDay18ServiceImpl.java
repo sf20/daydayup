@@ -1,5 +1,6 @@
 package com.ryfast.project.biz.kline.service.impl;
 
+import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -90,5 +91,10 @@ public class StockKlineDay18ServiceImpl implements IStockKlineDay18Service
     public int deleteStockKlineDay18ByStockCode(String stockCode)
     {
         return stockKlineDay18Mapper.deleteStockKlineDay18ByStockCode(stockCode);
+    }
+
+    @Override
+    public Date selectLatestTradingDate(StockKlineDay18 stockKlineDay18) {
+        return stockKlineDay18Mapper.selectLatestTradingDate(stockKlineDay18);
     }
 }

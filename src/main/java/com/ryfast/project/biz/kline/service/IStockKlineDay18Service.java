@@ -1,5 +1,6 @@
 package com.ryfast.project.biz.kline.service;
 
+import java.util.Date;
 import java.util.List;
 import com.ryfast.project.biz.kline.domain.StockKlineDay18;
 
@@ -58,4 +59,6 @@ public interface IStockKlineDay18Service
      * @return 结果
      */
     public int deleteStockKlineDay18ByStockCode(String stockCode);
+
+    Date selectLatestTradingDate(StockKlineDay18 stockKlineDay18);
 }

@@ -2,6 +2,8 @@ package com.ryfast.project.biz.kline.domain;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Objects;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ryfast.framework.aspectj.lang.annotation.Excel;
 import com.ryfast.framework.web.domain.BaseEntity;
@@ -45,7 +47,7 @@ public class StockKlineDay18 extends BaseEntity
 
     /** 成交量 */
     @Excel(name = "成交量")
-    private Integer volume;
+    private Long volume;
 
     /** 昨收 */
     @Excel(name = "昨收")
@@ -153,12 +155,12 @@ public class StockKlineDay18 extends BaseEntity
     {
         return closePrice;
     }
-    public void setVolume(Integer volume)
+    public void setVolume(Long volume)
     {
         this.volume = volume;
     }
 
-    public Integer getVolume()
+    public Long getVolume()
     {
         return volume;
     }
@@ -304,5 +306,18 @@ public class StockKlineDay18 extends BaseEntity
             .append("diff", getDiff())
             .append("dea", getDea())
             .toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        StockKlineDay18 that = (StockKlineDay18) o;
+        return stockCode.equals(that.stockCode) && tradingDate.equals(that.tradingDate) && openPrice.equals(that.openPrice) && highPrice.equals(that.highPrice) && lowPrice.equals(that.lowPrice) && closePrice.equals(that.closePrice) && volume.equals(that.volume) && priceRange.equals(that.priceRange);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(stockCode, tradingDate, openPrice, highPrice, lowPrice, closePrice, volume, priceRange);
     }
 }

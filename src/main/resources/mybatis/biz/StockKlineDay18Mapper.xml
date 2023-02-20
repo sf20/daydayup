@@ -39,11 +39,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="priceRange != null "> and price_range = #{priceRange}</if>
             <if test="wr != null "> and wr = #{wr}</if>
         </where>
+        order by trading_date, stock_code
     </select>
     
     <select id="selectStockKlineDay18ByStockCode" parameterType="String" resultMap="StockKlineDay18Result">
         <include refid="selectStockKlineDay18Vo"/>
         where stock_code = #{stockCode}
+    </select>
+
+    <select id="selectLatestTradingDate" resultType="Date">
+        SELECT max(trading_date) from stock_kline_day_18
+        <where>
+            <if test="stockCode != null  and stockCode != ''"> and stock_code like concat(#{stockCode}, '%')</if>
+        </where>
     </select>
         
     <insert id="insertStockKlineDay18" parameterType="StockKlineDay18">
@@ -97,12 +105,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateStockKlineDay18" parameterType="StockKlineDay18">
         update stock_kline_day_18
         <trim prefix="SET" suffixOverrides=",">
-            <if test="tradingDate != null">trading_date = #{tradingDate},</if>
-            <if test="openPrice != null">open_price = #{openPrice},</if>
-            <if test="highPrice != null">high_price = #{highPrice},</if>
-            <if test="lowPrice != null">low_price = #{lowPrice},</if>
-            <if test="closePrice != null">close_price = #{closePrice},</if>
-            <if test="volume != null">volume = #{volume},</if>
             <if test="closingPricePrevious != null">closing_price_previous = #{closingPricePrevious},</if>
             <if test="priceRange != null">price_range = #{priceRange},</if>
             <if test="ma5 != null">ma5 = #{ma5},</if>
@@ -117,7 +119,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="diff != null">diff = #{diff},</if>
             <if test="dea != null">dea = #{dea},</if>
         </trim>
-        where stock_code = #{stockCode}
+        where stock_code = #{stockCode} and trading_date = #{tradingDate}
     </update>
 
     <delete id="deleteStockKlineDay18ByStockCode" parameterType="String">
