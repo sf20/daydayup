@@ -10,6 +10,7 @@ import com.ryfast.project.biz.company.service.IStockCompanyService;
 import com.ryfast.project.biz.download.domain.ResDataModel;
 import com.ryfast.project.biz.download.domain.ResDayDataModel;
 import com.ryfast.project.biz.kline.domain.StockKlineDay18;
+import com.ryfast.project.biz.kline.service.IStockKlineDay18Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -36,16 +37,14 @@ public class DownloadKlineDataServiceSHA extends DownloadKlineDataService {
     private final String[] CODE_ARRAY = {"600004", "600006"};
     @Resource
     private IStockCompanyService stockCompanyService;
+    @Resource
+    private IStockKlineDay18Service stockKlineDay18Service;
 
     @Override
     protected Date getMaxTradingDate() {
-        Date date = null;
-        try {
-            date = Consts.DATE_FORMAT.parse("2022-07-06");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return date;
+        StockKlineDay18 queryParam = new StockKlineDay18();
+        queryParam.setStockCode("6");
+        return stockKlineDay18Service.selectLatestTradingDate(queryParam);
     }
 
     /**

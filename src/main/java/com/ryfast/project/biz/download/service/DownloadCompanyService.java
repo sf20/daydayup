@@ -40,13 +40,10 @@ public class DownloadCompanyService {
                 StockCompany cmpFromDB = stockCompanyService.selectStockCompanyByStockCode(cmpCode);
                 if (cmpFromDB == null) {
                     // new company
-//                    cmpFromFile.setCreateTime(new Date());
-//                    cmpFromFile.setUpdateTime(new Date());
                     stockCompanyService.insertStockCompany(cmpFromFile);
                     log.info("insert SZA company: " + cmpFromFile);
                 } else {
                     // company info changed
-//                    cmpFromFile.setUpdateTime(new Date());
                     stockCompanyService.updateStockCompany(cmpFromFile);
                     log.info("update SZA company before: " + cmpFromDB);
                     log.info("update SZA company after: " + cmpFromFile);
@@ -115,13 +112,10 @@ public class DownloadCompanyService {
                 StockCompany cmpFromDB = stockCompanyService.selectStockCompanyByStockCode(cmpCode);
                 if (cmpFromDB == null) {
                     // new company
-//                    cmpOnline.setCreateTime(new Date());
-//                    cmpOnline.setUpdateTime(new Date());
                     stockCompanyService.insertStockCompany(cmpOnline);
                     log.info("insert SHA company: " + cmpOnline);
                 } else {
                     // company info changed
-//                    cmpOnline.setUpdateTime(new Date());
                     stockCompanyService.updateStockCompany(cmpOnline);
                     log.info("update SHA company before: " + cmpFromDB);
                     log.info("update SHA company after: " + cmpOnline);
@@ -177,8 +171,5 @@ public class DownloadCompanyService {
         return jsonArray.get(0).getAsJsonObject();
     }
 
-    public void test() {
-        log.info("测试ok");
-    }
 }
 

@@ -5,10 +5,12 @@ import com.ryfast.common.constant.Consts;
 import com.ryfast.common.utils.kline.DownloadUtil;
 import com.ryfast.common.utils.kline.ExcelUtil;
 import com.ryfast.project.biz.kline.domain.StockKlineDay18;
+import com.ryfast.project.biz.kline.service.IStockKlineDay18Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -28,15 +30,14 @@ public class DownloadKlineDataServiceSZA extends DownloadKlineDataService {
     private static final String URL3 = "&radioClass=00%2C20%2C30&txtSite=all&random=0.053655309153661124";
     private static final int MINIMUM_FILE_SIZE = 160000;
 
+    @Resource
+    private IStockKlineDay18Service stockKlineDay18Service;
+
     @Override
     protected Date getMaxTradingDate() {
-        Date date = null;
-        try {
-            date = Consts.DATE_FORMAT.parse("2023-01-31");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return date;
+        StockKlineDay18 queryParam = new StockKlineDay18();
+        queryParam.setStockCode("0");
+        return stockKlineDay18Service.selectLatestTradingDate(queryParam);
     }
 
     /**

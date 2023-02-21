@@ -130,7 +130,6 @@ public abstract class DownloadKlineDataService {
                         StockKlineDay18 dataFromDB = klineDayOptional.get();
                         if (!klineDayFromFile.equals(dataFromDB)) {
                             // 比对不一致 更新记录
-//                            klineDayFromFile.setUpdateTime(new Date());
                             stockKlineDayService.updateStockKlineDay18(klineDayFromFile);
                             log.info("数据库原记录：" + dataFromDB);
                             log.info("更新后新记录：" + klineDayFromFile);
@@ -138,8 +137,6 @@ public abstract class DownloadKlineDataService {
                     }
                 } else {
                     // 数据库查找不到 新增记录
-//                    klineDayFromFile.setCreateTime(new Date());
-//                    klineDayFromFile.setUpdateTime(new Date());
                     stockKlineDayService.insertStockKlineDay18(klineDayFromFile);
                     log.info("新增记录：" + klineDayFromFile);
                 }
