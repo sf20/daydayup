@@ -284,7 +284,7 @@ public class StockKlineDay18 extends BaseEntity
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+        return new ToStringBuilder(this, ToStringStyle.DEFAULT_STYLE)
             .append("stockCode", getStockCode())
             .append("tradingDate", getTradingDate())
             .append("openPrice", getOpenPrice())

@@ -19,8 +19,8 @@ public class DownloadUtil {
         // step1：从网络流中拿数据
         URL url = new URL(downloadUrl);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        // 设置超时间为3秒
-        conn.setConnectTimeout(3 * 1000);
+        // 设置超时间为10秒
+        conn.setConnectTimeout(10 * 1000);
         // 得到输入流
         InputStream inputStream = conn.getInputStream();
         // 获取字节数组

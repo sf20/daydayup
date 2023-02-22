@@ -106,7 +106,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update stock_kline_day_18
         <trim prefix="SET" suffixOverrides=",">
             <if test="closingPricePrevious != null">closing_price_previous = #{closingPricePrevious},</if>
-            <if test="priceRange != null">price_range = #{priceRange},</if>
             <if test="ma5 != null">ma5 = #{ma5},</if>
             <if test="ma10 != null">ma10 = #{ma10},</if>
             <if test="ma20 != null">ma20 = #{ma20},</if>

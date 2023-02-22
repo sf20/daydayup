@@ -25,7 +25,7 @@ public class DownloadKlineDataServiceSZA extends DownloadKlineDataService {
     private static final String FILE_SUFFIX = ".xlsx";
     private static final String SHEET_NAME = "股票行情";
     private static final String[] COL_NAME = {"交易日期", "证券代码", "开盘", "最高", "最低", "今收", "涨跌幅（%）", "成交量(万股)"};
-    private static final String URL1 = "http://www.szse.cn/api/report/ShowReport?SHOWTYPE=xlsx&CATALOGID=1815_stock&TABKEY=tab1&txtBeginDate=";
+    private static final String URL1 = "http://www.szse.cn/api/report/ShowReport?SHOWTYPE=xlsx&CATALOGID=1815_stock_snapshot&TABKEY=tab1&txtBeginDate=";
     private static final String URL2 = "&txtEndDate=";
     private static final String URL3 = "&radioClass=00%2C20%2C30&txtSite=all&random=0.053655309153661124";
     private static final int MINIMUM_FILE_SIZE = 160000;
