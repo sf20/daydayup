@@ -134,6 +134,8 @@ public class DownloadKlineDataServiceSZA extends DownloadKlineDataService {
             klineList.add(klineModel);
         }
 
+        // TODO 过滤1开头的数据
+
         // 过滤掉code以2开头或者成交量为0的数据
         return klineList.stream().filter(k -> (!k.getStockCode().startsWith("2")) && k.getVolume() > 0).collect(Collectors.toList());
     }

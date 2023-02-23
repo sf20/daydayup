@@ -42,9 +42,16 @@ public class DownloadKlineDataServiceSHA extends DownloadKlineDataService {
 
     @Override
     protected Date getMaxTradingDate() {
-        StockKlineDay18 queryParam = new StockKlineDay18();
-        queryParam.setStockCode("6");
-        return stockKlineDay18Service.selectLatestTradingDate(queryParam);
+//        StockKlineDay18 queryParam = new StockKlineDay18();
+//        queryParam.setStockCode("6");
+//        return stockKlineDay18Service.selectLatestTradingDate(queryParam);
+        Date date = null;
+        try {
+            date = Consts.DATE_FORMAT.parse("2023-02-20");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
     }
 
     /**
@@ -214,15 +221,17 @@ public class DownloadKlineDataServiceSHA extends DownloadKlineDataService {
     /**
      * 处理历史数据
      *
-     * @param dateList
+     * @param notProcessedDateList
      * @throws Exception
      */
     @Override
-    protected void processHistoryData(List<Date> dateList) throws Exception {
+    protected void processHistoryData(List<Date> notProcessedDateList) throws Exception {
+        Date startDate = notProcessedDateList.get(0);
+        Date endDate = notProcessedDateList.get(notProcessedDateList.size() - 1);
         // 创建历史数据保存目录
-        String startDate = Consts.DATE_FORMAT_YYYYMMDD.format(dateList.get(0));
-        String endDate = Consts.DATE_FORMAT_YYYYMMDD.format(dateList.get(dateList.size() - 1));
-        String historySaveDir = FILEPATH_BASE_DIRECTORY + startDate + Consts.CONNECTOR + endDate + File.separator;
+        String startDateStr = Consts.DATE_FORMAT_YYYYMMDD.format(startDate);
+        String endDateStr = Consts.DATE_FORMAT_YYYYMMDD.format(endDate);
+        String historySaveDir = FILEPATH_BASE_DIRECTORY + startDateStr + Consts.CONNECTOR + endDateStr + File.separator;
         File historySaveDirFile = new File(historySaveDir);
         if (!historySaveDirFile.exists()) {
             historySaveDirFile.mkdir();
@@ -234,7 +243,7 @@ public class DownloadKlineDataServiceSHA extends DownloadKlineDataService {
         List<StockCompany> companyList = stockCompanyService.selectStockCompanyList(queryParam);
 
         // 下载历史数据天数
-        int days = dateList.size();
+        int days = notProcessedDateList.size() + 1;
         // 循环处理
         for (StockCompany stockCompany : companyList) {
             String stockCode = stockCompany.getStockCode();
@@ -243,6 +252,9 @@ public class DownloadKlineDataServiceSHA extends DownloadKlineDataService {
             String historyDataFilePath = downloadHistoryData(historySaveDir, stockCode, days);
             // 解析文件
             List<StockKlineDay18> historyDataListFromFile = parseHistoryData(stockCode, historyDataFilePath);
+            // 过滤指定日期范围内数据
+            historyDataListFromFile = historyDataListFromFile.stream().filter(k -> k.getTradingDate().compareTo(startDate) >= 0 && k.getTradingDate().compareTo(endDate) <= 0)
+                    .collect(Collectors.toList());
 
             // 查询数据库数据
             StockKlineDay18 tempQueryParam = new StockKlineDay18();
