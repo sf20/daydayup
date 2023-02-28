@@ -103,9 +103,8 @@ public class DownloadCompanyService {
             String cmpCode = cmpOnline.getStockCode();
             JsonObject fullInfoJson = getCompanyFullInfoSHA(cmpCode);
             cmpOnline.setMarket("6");
-            cmpOnline.setFullName(fullInfoJson.get("FULLNAME").getAsString());
-            cmpOnline.setIndustry(
-                    fullInfoJson.get("SSE_CODE_DESC").getAsString() + "/" + fullInfoJson.get("CSRC_CODE_DESC").getAsString() + "/"
+            cmpOnline.setFullName(fullInfoJson.get("FULL_NAME").getAsString());
+            cmpOnline.setIndustry(fullInfoJson.get("CSRC_CODE_DESC").getAsString() + "/"
                             + fullInfoJson.get("CSRC_GREAT_CODE_DESC").getAsString());
 
             if (!dataListFromDB.contains(cmpOnline)) {
@@ -155,12 +154,12 @@ public class DownloadCompanyService {
     }
 
     private JsonObject getCompanyFullInfoSHA(String code) throws Exception {
-        String url = "http://query.sse.com.cn/commonQuery.do?jsonCallBack=jsonpCallback51286&isPagination=false&sqlId=COMMON_SSE_ZQPZ_GP_GPLB_C&productid="
-                + code + "&_=1636611399813";
+        String url = "http://query.sse.com.cn/commonQuery.do?jsonCallBack=jsonpCallback72927175&isPagination=false&sqlId=COMMON_SSE_CP_GPJCTPZ_GPLB_GPGK_GSGK_C&COMPANY_CODE="
+                + code + "&_=1677545720083";
         Map<String, String> headers = new HashMap<>();
         headers.put("Referer", "http://www.sse.com.cn/");
         String result = HttpClientUtil.doGet(url, null, headers);
-        result = result.replace("jsonpCallback51286(", "").replaceAll("\\)$", "");
+        result = result.replace("jsonpCallback72927175(", "").replaceAll("\\)$", "");
 
         Gson gson = new Gson();
         JsonObject jsonObject = gson.fromJson(result, JsonObject.class);

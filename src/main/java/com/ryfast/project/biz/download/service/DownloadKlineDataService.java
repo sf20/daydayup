@@ -31,12 +31,15 @@ public abstract class DownloadKlineDataService {
      * @throws Exception
      */
     public void doProcess() throws Exception {
+        boolean useTodayDate = true;
         // 执行时间判断
         Calendar nowDate = Calendar.getInstance();
         // 执行时间<17:00 进行提示
         if (nowDate.get(Calendar.HOUR_OF_DAY) < 17) {
             nowDate.add(Calendar.DAY_OF_MONTH, -1);
             log.info("提示：当前时间在线数据还未生成，获取数据截止到前一天。");
+
+            useTodayDate = false;
         }
 
         // 查询数据库最新更新日期 日期格式：yyyy-MM-dd 00:00:00
@@ -64,12 +67,14 @@ public abstract class DownloadKlineDataService {
 
         // 未处理天数
         int notProcessedDays = notProcessedDateList.size();
-        if (notProcessedDays == 1) {
-            // 执行单日数据处理
-            processDayData(notProcessedDateList.get(0));
-        } else if (notProcessedDays > 1) {
-            // 执行历史数据处理
-            processHistoryData(notProcessedDateList);
+        if (notProcessedDays > 0) {
+            if (notProcessedDays == 1 && useTodayDate) {
+                // 执行单日数据处理
+                processDayData(notProcessedDateList.get(0));
+            } else {
+                // 执行历史数据处理
+                processHistoryData(notProcessedDateList);
+            }
         }
     }
 
@@ -272,6 +277,45 @@ public abstract class DownloadKlineDataService {
             maX = limitPeriodList.stream().map(StockKlineDay18::getClosePrice).reduce(BigDecimal.ZERO, BigDecimal::add).divide(BigDecimal.valueOf(period), 2, RoundingMode.HALF_UP).doubleValue();
         }
         return maX;
+    }
+
+    public List<String> findV3(Date givenDate) {
+        List<String> v3List = new ArrayList<>();
+        List<StockCompany> companyList = stockCompanyService.selectStockCompanyList(null);
+        for (StockCompany company : companyList) {
+            String stockCode = company.getStockCode();
+            StockKlineDay18 queryParam = new StockKlineDay18();
+            queryParam.setStockCode(stockCode);
+            List<StockKlineDay18> companyKlineList = stockKlineDayService.selectStockKlineDay18List(queryParam);
+            if (companyKlineList.size() > 10) {
+                List<StockKlineDay18> limit3List = companyKlineList.stream()
+                        .filter(s -> s.getTradingDate().compareTo(givenDate) <= 0)
+                        .sorted(Comparator.comparing(StockKlineDay18::getTradingDate).reversed())
+                        .limit(3)
+                        .collect(Collectors.toList());
+                if (limit3List.size() == 3) {
+                    StockKlineDay18 day1Kline = limit3List.get(2);
+                    StockKlineDay18 day2Kline = limit3List.get(1);
+                    StockKlineDay18 day3Kline = limit3List.get(0);
+                    BigDecimal day1HighPrice = day1Kline.getHighPrice();
+                    BigDecimal day1LowPrice = day1Kline.getLowPrice();
+                    BigDecimal day2HighPrice = day2Kline.getHighPrice();
+                    BigDecimal day2LowPrice = day2Kline.getLowPrice();
+                    BigDecimal day3HighPrice = day3Kline.getHighPrice();
+                    BigDecimal day3LowPrice = day3Kline.getLowPrice();
+                    Double day1KlineWr = day1Kline.getWr();
+                    Double day2KlineWr = day2Kline.getWr();
+                    Double day3KlineWr = day3Kline.getWr();
+
+                    if ((day1HighPrice.compareTo(day2HighPrice) > 0 && day1LowPrice.compareTo(day2LowPrice) > 0)
+                            && (day3HighPrice.compareTo(day2HighPrice) > 0 && day3LowPrice.compareTo(day2LowPrice) >= 0)
+                            && ((day1KlineWr > 90 || day2KlineWr > 90 || day3KlineWr > 90) && (day2KlineWr > day3KlineWr))) {
+                        v3List.add(stockCode);
+                    }
+                }
+            }
+        }
+        return v3List;
     }
 
     protected abstract Date getMaxTradingDate();

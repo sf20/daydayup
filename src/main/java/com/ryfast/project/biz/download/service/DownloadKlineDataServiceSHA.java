@@ -42,16 +42,16 @@ public class DownloadKlineDataServiceSHA extends DownloadKlineDataService {
 
     @Override
     protected Date getMaxTradingDate() {
-//        StockKlineDay18 queryParam = new StockKlineDay18();
-//        queryParam.setStockCode("6");
-//        return stockKlineDay18Service.selectLatestTradingDate(queryParam);
-        Date date = null;
-        try {
-            date = Consts.DATE_FORMAT.parse("2023-02-20");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return date;
+        StockKlineDay18 queryParam = new StockKlineDay18();
+        queryParam.setStockCode("6");
+        return stockKlineDay18Service.selectLatestTradingDate(queryParam);
+//        Date date = null;
+//        try {
+//            date = Consts.DATE_FORMAT.parse("2023-02-20");
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        return date;
     }
 
     /**
