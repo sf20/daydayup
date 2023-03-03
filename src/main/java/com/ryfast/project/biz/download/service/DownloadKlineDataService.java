@@ -288,28 +288,40 @@ public abstract class DownloadKlineDataService {
             queryParam.setStockCode(stockCode);
             List<StockKlineDay18> companyKlineList = stockKlineDayService.selectStockKlineDay18List(queryParam);
             if (companyKlineList.size() > 10) {
-                List<StockKlineDay18> limit3List = companyKlineList.stream()
+                List<StockKlineDay18> limit5List = companyKlineList.stream()
                         .filter(s -> s.getTradingDate().compareTo(givenDate) <= 0)
                         .sorted(Comparator.comparing(StockKlineDay18::getTradingDate).reversed())
-                        .limit(3)
+                        .limit(5)
                         .collect(Collectors.toList());
-                if (limit3List.size() == 3) {
-                    StockKlineDay18 day1Kline = limit3List.get(2);
-                    StockKlineDay18 day2Kline = limit3List.get(1);
-                    StockKlineDay18 day3Kline = limit3List.get(0);
+                if (limit5List.size() == 5) {
+                    StockKlineDay18 day1Kline = limit5List.get(4);
+                    StockKlineDay18 day2Kline = limit5List.get(3);
+                    StockKlineDay18 day3Kline = limit5List.get(2);
+                    StockKlineDay18 day4Kline = limit5List.get(1);
+                    StockKlineDay18 day5Kline = limit5List.get(0);
                     BigDecimal day1HighPrice = day1Kline.getHighPrice();
                     BigDecimal day1LowPrice = day1Kline.getLowPrice();
-                    BigDecimal day2HighPrice = day2Kline.getHighPrice();
-                    BigDecimal day2LowPrice = day2Kline.getLowPrice();
                     BigDecimal day3HighPrice = day3Kline.getHighPrice();
                     BigDecimal day3LowPrice = day3Kline.getLowPrice();
-                    Double day1KlineWr = day1Kline.getWr();
-                    Double day2KlineWr = day2Kline.getWr();
+                    BigDecimal day4HighPrice = day4Kline.getHighPrice();
+                    BigDecimal day4LowPrice = day4Kline.getLowPrice();
+                    BigDecimal day5HighPrice = day5Kline.getHighPrice();
+                    BigDecimal day5LowPrice = day5Kline.getLowPrice();
+                    BigDecimal day1PriceRange = day1Kline.getPriceRange();
+                    BigDecimal day2PriceRange = day2Kline.getPriceRange();
+                    BigDecimal day3PriceRange = day3Kline.getPriceRange();
                     Double day3KlineWr = day3Kline.getWr();
+                    Double day4KlineWr = day4Kline.getWr();
+                    Double day5KlineWr = day5Kline.getWr();
+                    BigDecimal day5ClosePrice = day5Kline.getClosePrice();
+                    Long day5KlineVolume = day5Kline.getVolume();
 
-                    if ((day1HighPrice.compareTo(day2HighPrice) > 0 && day1LowPrice.compareTo(day2LowPrice) > 0)
-                            && (day3HighPrice.compareTo(day2HighPrice) > 0 && day3LowPrice.compareTo(day2LowPrice) >= 0)
-                            && ((day1KlineWr > 90 || day2KlineWr > 90 || day3KlineWr > 90) && (day2KlineWr > day3KlineWr))) {
+                    if ((day1HighPrice.compareTo(day3HighPrice) > 0 && day1LowPrice.compareTo(day3LowPrice) > 0)
+                            && (day1PriceRange.add(day2PriceRange).add(day3PriceRange).compareTo(BigDecimal.valueOf(-4)) <= 0)
+                            && (day5HighPrice.compareTo(day4HighPrice) > 0 && day5LowPrice.compareTo(day4LowPrice) >= 0)
+                            && ((day3KlineWr > 90 || day4KlineWr > 90 || day5KlineWr > 90) && (day4KlineWr > day5KlineWr))
+                            && day5ClosePrice.compareTo(BigDecimal.valueOf(9)) > 0
+                            && day5KlineVolume > 20000000) {
                         v3List.add(stockCode);
                     }
                 }
