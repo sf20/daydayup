@@ -41,7 +41,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
         order by trading_date, stock_code
     </select>
-    
+
+    <select id="selectStockKlineDay18ListLimit" parameterType="StockKlineDay18" resultMap="StockKlineDay18Result">
+        <include refid="selectStockKlineDay18Vo"/>
+        <where>
+            <if test="stockCode != null  and stockCode != ''"> and stock_code = #{stockCode}</if>
+        </where>
+        order by trading_date desc
+        limit 20
+    </select>
+
     <select id="selectStockKlineDay18ByStockCode" parameterType="String" resultMap="StockKlineDay18Result">
         <include refid="selectStockKlineDay18Vo"/>
         where stock_code = #{stockCode}

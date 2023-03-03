@@ -330,6 +330,36 @@ public abstract class DownloadKlineDataService {
         return v3List;
     }
 
+    public List<String> findZt(Date givenDate) {
+        List<String> ztList = new ArrayList<>();
+        List<StockCompany> companyList = stockCompanyService.selectStockCompanyList(null);
+        for (StockCompany company : companyList) {
+            String stockCode = company.getStockCode();
+            StockKlineDay18 queryParam = new StockKlineDay18();
+            queryParam.setStockCode(stockCode);
+            List<StockKlineDay18> descLimit20List = stockKlineDayService.selectStockKlineDay18ListLimit(queryParam);
+            if (descLimit20List.size() == 20) {
+                List<StockKlineDay18> ascLimit20List = descLimit20List.stream().sorted(Comparator.comparing(StockKlineDay18::getTradingDate)).collect(Collectors.toList());
+                // StockKlineDay18 maxVolumeKline = ascLimit20List.stream().max(Comparator.comparing(StockKlineDay18::getVolume)).get();
+                for (int i = 0; i < ascLimit20List.size() - 1; i++) {
+                    StockKlineDay18 kline1 = ascLimit20List.get(i);
+                    StockKlineDay18 kline2 = ascLimit20List.get(i + 1);
+                    Long kline1Volume = kline1.getVolume();
+                    Long kline2Volume = kline2.getVolume();
+                    BigDecimal closePrice = kline2.getClosePrice();
+                    BigDecimal priceRange = kline2.getPriceRange();
+                    if (kline2Volume > 50000000 && ((double) kline2Volume / (double) kline1Volume) > 3
+                            && closePrice.compareTo(BigDecimal.valueOf(10)) > 0
+                            && priceRange.compareTo(BigDecimal.valueOf(7)) > 0) {
+                        ztList.add(stockCode);
+                        break;
+                    }
+                }
+            }
+        }
+        return ztList;
+    }
+
     protected abstract Date getMaxTradingDate();
 
     protected abstract void processDayData(Date date) throws Exception;

@@ -29,6 +29,14 @@ public interface IStockKlineDay18Service
     public List<StockKlineDay18> selectStockKlineDay18List(StockKlineDay18 stockKlineDay18);
 
     /**
+     * 查询kline列表
+     *
+     * @param stockKlineDay18 kline
+     * @return kline集合
+     */
+    public List<StockKlineDay18> selectStockKlineDay18ListLimit(StockKlineDay18 stockKlineDay18);
+
+    /**
      * 新增kline
      * 
      * @param stockKlineDay18 kline

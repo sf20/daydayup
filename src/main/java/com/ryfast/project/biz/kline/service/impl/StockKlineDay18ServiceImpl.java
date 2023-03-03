@@ -46,6 +46,18 @@ public class StockKlineDay18ServiceImpl implements IStockKlineDay18Service
     }
 
     /**
+     * 查询kline列表
+     *
+     * @param stockKlineDay18 kline
+     * @return kline
+     */
+    @Override
+    public List<StockKlineDay18> selectStockKlineDay18ListLimit(StockKlineDay18 stockKlineDay18)
+    {
+        return stockKlineDay18Mapper.selectStockKlineDay18ListLimit(stockKlineDay18);
+    }
+
+    /**
      * 新增kline
      * 
      * @param stockKlineDay18 kline
