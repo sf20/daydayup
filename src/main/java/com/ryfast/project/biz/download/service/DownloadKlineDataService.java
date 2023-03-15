@@ -337,24 +337,18 @@ public abstract class DownloadKlineDataService {
             String stockCode = company.getStockCode();
             StockKlineDay18 queryParam = new StockKlineDay18();
             queryParam.setStockCode(stockCode);
-            List<StockKlineDay18> descLimit20List = stockKlineDayService.selectStockKlineDay18ListLimit(queryParam);
-            if (descLimit20List.size() == 20) {
-                List<StockKlineDay18> ascLimit20List = descLimit20List.stream().sorted(Comparator.comparing(StockKlineDay18::getTradingDate)).collect(Collectors.toList());
-                // StockKlineDay18 maxVolumeKline = ascLimit20List.stream().max(Comparator.comparing(StockKlineDay18::getVolume)).get();
-                for (int i = 0; i < ascLimit20List.size() - 1; i++) {
-                    StockKlineDay18 kline1 = ascLimit20List.get(i);
-                    StockKlineDay18 kline2 = ascLimit20List.get(i + 1);
-                    Long kline1Volume = kline1.getVolume();
-                    Long kline2Volume = kline2.getVolume();
-                    BigDecimal closePrice = kline2.getClosePrice();
-                    BigDecimal priceRange = kline2.getPriceRange();
-                    if (kline2Volume > 50000000 && ((double) kline2Volume / (double) kline1Volume) > 3
-                            && closePrice.compareTo(BigDecimal.valueOf(10)) > 0
-                            && priceRange.compareTo(BigDecimal.valueOf(7)) > 0) {
-                        ztList.add(stockCode);
-                        break;
-                    }
-                }
+            List<StockKlineDay18> limitList = stockKlineDayService.selectStockKlineDay18ListLimit(queryParam);
+            double latestClosePrice = limitList.get(limitList.size() - 1).getClosePrice().doubleValue();
+            StockKlineDay18 upwardDay1 = null;
+            StockKlineDay18 upwardDay2 = null;
+            StockKlineDay18 downwardDay = null;
+            for (int i = limitList.size() - 2; i >= 0; i--) {
+                StockKlineDay18 previousDay = limitList.get(i);
+                StockKlineDay18 nextDay = limitList.get(i + 1);
+                double previousDayMa20 = previousDay.getMa20();
+                double nextDayMa20 = nextDay.getMa20();
+                double previousDayMa60 = previousDay.getMa60();
+                double nextDayMa60 = nextDay.getMa60();
             }
         }
         return ztList;
